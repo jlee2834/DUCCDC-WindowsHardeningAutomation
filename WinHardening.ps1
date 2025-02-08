@@ -15,18 +15,12 @@ function Print-Status {
     }
 }
 
-# Run as Administrator to execute
-if (-not (Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System")) {
-    Print-Status "This script requires Administrator privileges to run." $false
-    exit
-}
-
 # Enables Windows Defender Antivirus 
 try {
     Set-MpPreference -DisableRealtimeMonitoring $false
     Print-Status "Windows Defender Antivirus enabled successfully." $true
 } catch {
-    Print-Status "Failed to enable Windows Defender Antivirus." $false
+    Print-Status "Failed To Enable Windows Defender Antivirus - Manual Disable Required" $false
 }
 
 # Enables Windows Defender Firewall 
@@ -34,5 +28,13 @@ try {
     Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
     Print-Status "Windows Defender Firewall enabled successfully." $true
 } catch {
-    Print-Status "Failed to enable Windows Defender Firewall." $false
+    Print-Status "Failed To Enable Windows Defender Firewall - Manual Disable Required" $false
+}
+
+# Disable Remote Desktop
+try {
+    Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name fDenyTSConnections -Value 1
+    Print-Status "Remote Desktop disabled successfully." $true
+} catch {
+    Print-Status "Failed To Disable Remote Desktop - Manual Disable Required" $false
 }
