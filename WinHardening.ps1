@@ -38,3 +38,6 @@ try {
 } catch {
     Print-Status "Failed To Disable Remote Desktop - Manual Disable Required" $false
 }
+
+Write-Host "Hardening Complete" -ForegroundColor Yellow
+Write-Host "Please Manually Verify All Changes Have Taken Effect" -ForegroundColor Yellow
